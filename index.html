@@ -91,6 +91,29 @@
 <div id="explore" class="view" style="padding:40px; flex-direction:column;"><h1>Explore Projects</h1></div>
 
 <script>
+    function handleCredentialResponse(response) {
+    // 1. Decode the Google "Identity Token" to get your profile info
+    const payload = JSON.parse(atob(response.credential.split('.')[1]));
+    
+    // 2. Find the "Guest" text in the navbar and change it to your name
+    const userNameElement = document.getElementById('userName');
+    if (userNameElement) {
+        userNameElement.innerText = payload.given_name; // This sets it to your first name
+        userNameElement.style.color = "#white"; 
+        userNameElement.style.fontWeight = "bold";
+    }
+
+    // 3. Hide the "Sign In" button since you are now logged in
+    const signInBtn = document.querySelector('.auth-zone button');
+    if (signInBtn) {
+        signInBtn.style.display = 'none';
+    }
+
+    // 4. Close the modal
+    closeLogin();
+    
+    console.log("Successfully logged in as: " + payload.name);
+}
     // VIEW NAVIGATION
     function setView(id) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -145,4 +168,5 @@
 </script>
 </body>
 </html>
+
 
